@@ -1,7 +1,527 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кредитная заявка - Банк</title>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MBM8G89M');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBM8G89M"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+ 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+            width: 33.33%;
+        }
+        
+        .success {
+            text-align: center;
+            color: #27ae60;
+            display: none;
+        }
+        
+        .success.show {
+            display: block;
+        }
+        
+        .form-content.hide {
+            display: none;
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="container">
+        <h1>Заявка на кредит</h1>
+        
+        <div class="form-content">
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <form id="creditForm">
+                <!-- Шаг 1: Персональные данные -->
+                <div class="form-step active" id="step1">
+                    <h2>Персональные данные</h2>
+                    <div class="form-group">
+                        <label for="firstName">Имя *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div class="error" id="firstNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Фамилия *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <div class="error" id="lastNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error" id="phoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error" id="emailError"></div>
+                    </div>
+                </div>
+                
+                <!-- Шаг 2: Параметры кредита -->
+                <div class="form-step" id="step2">
+                    <h2>Параметры кредита</h2>
+                    <div class="form-group">
+                        <label for="amount">Сумма кредита *</label>
+                        <input type="number" id="amount" name="amount" min="50000" max="3000000" required>
+                        <div class="error" id="amountError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="term">Срок кредита (месяцы) *</label>
+                        <select id="term" name="term" required>
+                            <option value="">Выберите срок</option>
+                            <option value="12">12 месяцев</option>
+                            <option value="24">24 месяца</option>
+                            <option value="36">36 месяцев</option>
+                            <option value="48">48 месяцев</option>
+                            <option value="60">60 месяцев</option>
+                        </select>
+                        <div class="error" id="termError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="purpose">Цель кредита *</label>
+                        <select id="purpose" name="purpose" required>
+                            <option value="">Выберите цель</option>
+                            <option value="auto">Покупка автомобиля</option>
+                            <option value="home">Ремонт/покупка недвижимости</option>
+                            <option value="education">Образование</option>
+                            <option value="business">Развитие бизнеса</option>
+                            <option value="other">Другое</option>
+                        </select>
+                        <div class="error" id="purposeError"></div>
+                    </div>
+                </div>
+                
+                <!-- Шаг 3: Финансовая информация -->
+                <div class="form-step" id="step3">
+                    <h2>Финансовая информация</h2>
+                    <div class="form-group">
+                        <label for="income">Ежемесячный доход *</label>
+                        <input type="number" id="income" name="income" min="20000" required>
+                        <div class="error" id="incomeError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="employment">Тип занятости *</label>
+                        <select id="employment" name="employment" required>
+                            <option value="">Выберите тип</option>
+                            <option value="employee">Наемный сотрудник</option>
+                            <option value="selfemployed">Самозанятый</option>
+                            <option value="business">Предприниматель</option>
+                            <option value="pensioner">Пенсионер</option>
+                        </select>
+                        <div class="error" id="employmentError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="workExperience">Стаж работы (лет) *</label>
+                        <input type="number" id="workExperience" name="workExperience" min="0" max="50" required>
+                        <div class="error" id="workExperienceError"></div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" id="prevBtn" class="btn-secondary" style="display: none;">Назад</button>
+                    <button type="button" id="nextBtn" class="btn-primary">Далее</button>
+                    <button type="submit" id="submitBtn" class="btn-primary" style="display: none;">Отправить заявку</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="success" id="successMessage">
+            <h2>✅ Заявка успешно отправлена!</h2>
+            <p>Мы свяжемся с вами в течение 24 часов</p>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация dataLayer
+        window.dataLayer = window.dataLayer || [];
+        
+        // Переменные для отслеживания
+        let currentStep = 1;
+        let formStartTime = null;
+        let formData = {};
+        let abandonTimer = null;
+        
+        // Функция для отправки событий в dataLayer
+        function pushToDataLayer(eventData) {
+            window.dataLayer.push({
+                ...eventData,
+                timestamp: Date.now(),
+                page_url: window.location.href,
+                user_agent: navigator.userAgent
+            });
+            console.log('DataLayer event:', eventData);
+        }
+        
+        // Элементы DOM
+        const form = document.getElementById('creditForm');
+        const steps = document.querySelectorAll('.form-step');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBar = document.getElementById('progressBar');
+        const successMessage = document.getElementById('successMessage');
+        const formContent = document.querySelector('.form-content');
+        
+        // Отслеживание начала формы
+        let formStarted = false;
+        
+        // Обработчики событий для отслеживания начала формы
+        form.addEventListener('focusin', function(e) {
+            if (!formStarted) {
+                formStarted = true;
+                formStartTime = Date.now();
+                
+                pushToDataLayer({
+                    event: 'form_start',
+                    form_type: 'credit_application',
+                    form_id: 'credit_form_main',
+                    form_step: currentStep,
+                    form_step_name: getStepName(currentStep)
+                });
+                
+                // Запуск таймера для отслеживания брошенных форм
+                setAbandonTimer();
+            }
+        });
+        
+        // Функция для получения имени шага
+        function getStepName(step) {
+            const stepNames = {
+                1: 'personal_info',
+                2: 'credit_params',
+                3: 'financial_info'
+            };
+            return stepNames[step] || 'unknown';
+        }
+        
+        // Таймер для отслеживания брошенных форм
+        function setAbandonTimer() {
+            clearTimeout(abandonTimer);
+            abandonTimer = setTimeout(() => {
+                if (formStarted && currentStep < 4) {
+                    pushToDataLayer({
+                        event: 'form_abandon',
+                        form_type: 'credit_application',
+                        form_id: 'credit_form_main',
+                        form_step: currentStep,
+                        form_step_name: getStepName(currentStep),
+                        time_spent: Date.now() - formStartTime,
+                        abandonment_reason: 'timeout'
+                    });
+                }
+            }, 60000); // 1 минута бездействия
+        }
+        
+        // Сброс таймера при активности
+        document.addEventListener('mousemove', setAbandonTimer);
+        document.addEventListener('keypress', setAbandonTimer);
+        
+        // Отслеживание ухода со страницы
+        window.addEventListener('beforeunload', function() {
+            if (formStarted && currentStep < 4) {
+                pushToDataLayer({
+                    event: 'form_abandon',
+                    form_type: 'credit_application',
+                    form_id: 'credit_form_main',
+                    form_step: currentStep,
+                    form_step_name: getStepName(currentStep),
+                    time_spent: Date.now() - formStartTime,
+                    abandonment_reason: 'page_leave'
+                });
+            }
+        });
+        
+        // Функция валидации
+        function validateStep(step) {
+            let isValid = true;
+            const stepElement = document.getElementById(`step${step}`);
+            const inputs = stepElement.querySelectorAll('input, select');
+            
+            inputs.forEach(input => {
+                const errorElement = document.getElementById(`${input.name}Error`);
+                errorElement.textContent = '';
+                
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    errorElement.textContent = 'Это поле обязательно для заполнения';
+                    isValid = false;
+                }
+                
+                // Дополнительная валидация
+                if (input.type === 'email' && input.value && !isValidEmail(input.value)) {
+                    errorElement.textContent = 'Введите корректный email';
+                    isValid = false;
+                }
+                
+                if (input.type === 'tel' && input.value && !isValidPhone(input.value)) {
+                    errorElement.textContent = 'Введите корректный номер телефона';
+                    isValid = false;
+                }
+                
+                if (input.name === 'amount' && input.value && (input.value < 50000 || input.value > 3000000)) {
+                    errorElement.textContent = 'Сумма должна быть от 50,000 до 3,000,000 рублей';
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                pushToDataLayer({
+                    event: 'form_error',
+                    form_type: 'credit_application',
+                    form_id: 'credit_form_main',
+                    form_step: step,
+                    form_step_name: getStepName(step),
+                    error_type: 'validation_error'
+                });
+            }
+            
+            return isValid;
+        }
+        
+        // Функции валидации
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        function isValidPhone(phone) {
+            return /^[\+]?[0-9\s\-\(\)]{10,}$/.test(phone);
+        }
+        
+        // Функция для показа шага
+        function showStep(step) {
+            steps.forEach((stepElement, index) => {
+                stepElement.classList.remove('active');
+                if (index + 1 === step) {
+                    stepElement.classList.add('active');
+                }
+            });
+            
+            // Обновление прогресс-бара
+            const progress = (step / 3) * 100;
+            progressBar.style.width = progress + '%';
+            
+            // Управление кнопками
+            prevBtn.style.display = step > 1 ? 'block' : 'none';
+            nextBtn.style.display = step < 3 ? 'block' : 'none';
+            submitBtn.style.display = step === 3 ? 'block' : 'none';
+        }
+        
+        // Обработчик кнопки "Далее"
+        nextBtn.addEventListener('click', function() {
+            if (validateStep(currentStep)) {
+                // Сохранение данных текущего шага
+                const stepElement = document.getElementById(`step${currentStep}`);
+                const inputs = stepElement.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    formData[input.name] = input.value;
+                });
+                
+                pushToDataLayer({
+                    event: 'form_step_complete',
+                    form_type: 'credit_application',
+                    form_id: 'credit_form_main',
+                    form_step: currentStep,
+                    form_step_name: getStepName(currentStep),
+                    form_data: {...formData}
+                });
+                
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+        
+        // Обработчик кнопки "Назад"
+        prevBtn.addEventListener('click', function() {
+            currentStep--;
+            showStep(currentStep);
+        });
+        
+        // Обработчик отправки формы
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateStep(currentStep)) {
+                // Сохранение данных последнего шага
+                const stepElement = document.getElementById(`step${currentStep}`);
+                const inputs = stepElement.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    formData[input.name] = input.value;
+                });
+                
+                // Отправка события завершения формы
+                pushToDataLayer({
+                    event: 'form_submit',
+                    form_type: 'credit_application',
+                    form_id: 'credit_form_main',
+                    form_completion_time: Date.now() - formStartTime,
+                    lead_amount: formData.amount,
+                    lead_term: formData.term,
+                    lead_purpose: formData.purpose,
+                    lead_income: formData.income,
+                    lead_employment: formData.employment,
+                    form_data: {...formData}
+                });
+                
+                // Имитация отправки на сервер
+                setTimeout(() => {
+                    // Отправка события успешной конверсии
+                    pushToDataLayer({
+                        event: 'form_success',
+                        form_type: 'credit_application',
+                        form_id: 'credit_form_main',
+                        lead_id: 'LEAD_' + Date.now(),
+                        conversion_value: formData.amount,
+                        form_data: {...formData}
+                    });
+                    
+                    // Показать сообщение об успехе
+                    formContent.classList.add('hide');
+                    successMessage.classList.add('show');
+                    
+                    // Очистка таймера
+                    clearTimeout(abandonTimer);
+                    
+                }, 1000);
+            }
+        });
+        
+        // Инициализация
+        showStep(1);
+    </script>
 </body>
 </html>
